@@ -1,0 +1,134 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.roleStyle {
+    position: absolute;
+    left: 0 !important;
+    right: 0 !important;
+    opacity: 0;
+    color: #fafafa;
+    text-shadow: 0 0 6px #000, 0 0 1px #000;
+    font-weight: bold;
+    text-align: center;
+    background: url(image/thank.png) no-repeat center 300px;
+    background-size: 80%;
+    font-size: 30px;
+    z-index: 9999;
+}
+
+.userBg {
+    position: absolute;
+    top: calc(50% - 280px);
+    left: calc(50% - 110px);
+    width: 220px;
+    height: 280px;
+    border-radius: 50%;
+    background: url(image/userbg.jpg) no-repeat  48% 4%;
+    box-shadow: 0 0 40px 20px #fff;
+    opacity: 0;
+}
+
+.fadeInAnimation {
+    animation: mymove 3s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes mymove {
+    0% {
+        opacity: 0;
+        transform: translate(-200px, 200px);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(0, 0);
+    }
+}
+
+@-moz-keyframes mymove
+
+/* Firefox */
+    {
+    0% {
+        opacity: 0;
+        transform: translate(-200px, 200px);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(0, 0);
+    }
+}
+
+@-webkit-keyframes mymove
+
+/* Safari 和 Chrome */
+    {
+    0% {
+        opacity: 0;
+        transform: translate(-200px, 200px);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(0, 0);
+    }
+}
+
+@-o-keyframes mymove
+
+/* Opera */
+    {
+    0% {
+        opacity: 0;
+        transform: translate(-200px, 200px);
+    }
+
+    40% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(0, 0);
+    }
+}
