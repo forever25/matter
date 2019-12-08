@@ -7,6 +7,479 @@
     <title>Document</title>
 <link href="main.css" rel="stylesheet"></head>
 <body>
-    
-<script type="text/javascript" src="main.js"></script></body>
+
+</body>
+<script type="text/javascript" src="./js/matter.js"></script>
+<script src="./js/jquery.js"></script>
+<script>
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    World = Matter.World,
+    Bodies = Matter.Bodies,
+    Composites = Matter.Composites,
+    Composite = Matter.Composite,
+    Body = Matter.Body,
+    Constraint = Matter.Constraint,
+    MouseConstraint = Matter.MouseConstraint,
+    Common = Matter.Common,
+    Events = Matter.Events;
+
+// 创建引擎
+var engine = Engine.create();
+
+// 创建渲染器
+var render = Render.create({
+    element: document.body,
+    engine: engine,
+    options: {
+        wireframes: false,
+        width: 400,
+        height: 750,
+        background: 'https://forever25.github.io/matter/image/bg.png'
+    }
+});
+
+//绘制墙壁
+var offset = 7;
+let leftWall1 = Bodies.rectangle(offset, 12, 14, 750, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-rl.png',
+        }
+    }
+});
+
+let leftWall2 = Bodies.rectangle(offset, 658, 14, 750, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-rl.png',
+        }
+    }
+});
+
+let rightWall1 = Bodies.rectangle(393, 12, 14, 750, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-rl.png',
+        }
+    }
+});
+
+let rightWall2 = Bodies.rectangle(393, 658, 14, 750, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-rl.png',
+        }
+    }
+});
+
+let bottomWall1 = Bodies.rectangle(12, 744, 400, 12, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-b.png',
+        }
+    }
+});
+
+let bottomWall3 = Bodies.rectangle(200, 744, 400, 12, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-b.png',
+        }
+    }
+});
+
+let bottomWall4 = Bodies.rectangle(300, 744, 600, 12, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-b.png',
+        }
+    }
+});
+let bottomWall5 = Bodies.rectangle(300, 744, 600, 12, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-b.png',
+        }
+    }
+});
+
+let bottomWall2 = Bodies.rectangle(320, 744, 400, 12, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-b.png',
+        }
+    }
+});
+
+let topLeftWall = Bodies.rectangle(60, 6, 120, 12, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-t-l.png',
+        }
+    }
+});
+
+let topRightWall = Bodies.rectangle(340, 6, 120, 12, {
+    isStatic: true,
+    render: {
+        sprite: {
+            texture: 'https://forever25.github.io/matter/image/b-t-r.png',
+        }
+    }
+});
+
+// 生成Will,放入世界
+World.add(engine.world, [leftWall1, leftWall2, rightWall1, rightWall2, bottomWall3,bottomWall4,bottomWall5, bottomWall1, bottomWall2,topLeftWall, topRightWall]);
+
+// 运行引擎
+Engine.run(engine);
+Render.run(render);
+
+
+let timeState = null;
+function dropgift(src, color, info) {
+    if (timeState == false) {
+        return;
+    }
+
+    timeState = false;
+    let image = new Image();
+    image.src = src;
+    image.onload = function (res) {
+        let scale = (info.w + info.h) / (res.path[0].width + res.path[0].height);
+        let w = info.w + 3,
+            h = info.h + 3;
+        let redio = info.h / 2 + 3;
+        let paths = src.split('/');
+        let fnName = paths[paths.length - 1].match(/\d\-(\w+)\.(png|jpg|gif)$/)[1];
+        let n = 0;
+
+        let itme = setInterval(() => {
+            let x = Math.floor(Math.random() * (240 - 140 + 1) + 140);
+            n++;
+            if (n == info.num) {
+                window.clearInterval(itme);
+                timeState = true;
+            }
+            let obj = gengift({
+                fnName,
+                x,
+                redio,
+                color,
+                w,
+                h,
+                scale,
+                src
+            });
+            World.add(engine.world, obj);
+            function addEnd(){
+                gift_num+=1;
+            }
+            Events.off(engine.world);
+            Events.on(engine.world,"afterAdd",addEnd);
+        }, 200);
+    }
+}
+
+function gengift(config) {
+    let {
+        fnName,
+        x,
+        redio,
+        color,
+        w,
+        h,
+        src,
+        scale
+    } = config;
+    let username = createText({
+        x,
+        w,
+        h,
+        text: tf_name
+    });
+
+    let collisionGroup = -username.id;
+    let option = {
+        render: {
+            sprite: {
+                texture: src,
+                xScale: scale,
+                yScale: scale
+            },
+        },
+        collisionFilter: {
+            group: collisionGroup
+        }
+    };
+    let boallWrap, boall;
+    switch (fnName) {
+        case 'circle':
+            boallWrap = Bodies[fnName](x, -200, redio, {
+                render: {
+                    fillStyle: color,
+                },
+                restitutionNumber: 0.8,
+                collisionFilter: {
+                    group: collisionGroup
+                }
+            });
+            boall = Bodies[fnName](x, -200, redio, option);
+            break;
+        case 'rectangle':
+            boallWrap = Bodies[fnName](x, -200, w, h, {
+                render: {
+                    fillStyle: color,
+                },
+                restitutionNumber: 0.8,
+                collisionFilter: {
+                    group: collisionGroup
+                }
+            });
+            boall = Bodies[fnName](x, -200, w, h, option);
+            break;
+        case 'polygon':
+            boallWrap = Bodies[fnName](x, -200, 6, redio, {
+                render: {
+                    fillStyle: color,
+                },
+                restitutionNumber: 0.8,
+                collisionFilter: {
+                    group: collisionGroup
+                }
+            });
+            boall = Bodies[fnName](x, -200, 6, redio, option);
+            break;
+    }
+    let rotate = Constraint.create({
+        bodyA: boallWrap,
+        bodyB: boall,
+        stiffness: 1,
+        length: 0.5,
+        render: {
+            visible: false
+        }
+    });
+
+    let textCon = Constraint.create({
+        bodyA: boallWrap,
+        bodyB: username,
+        pointB: {
+            x: 0,
+            y: 120 * scale
+        },
+        stiffness: 1,
+        length: 0.5,
+        render: {
+            visible: false
+        }
+    });
+
+    let composite = Composite.create();
+    Composite.setModified(composite, false, true, false);
+    let composeBall = Composite.add(composite, [boallWrap, boall, username, rotate, textCon]);
+    return composeBall;
+}
+
+function mainText(info) {
+    let {
+        size,
+        text,
+        color,
+        strokColor
+    } = info;
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+    let username = text;
+    let fontSize = size;
+    canvas.height = fontSize;
+    canvas.width = (fontSize - 10) * username.length + 10;
+
+    ctx.lineWidth = 5;
+    ctx.font = (fontSize - 10) + "px Forte";
+    ctx.textBaseline = 'top';
+    ctx.shadowBlur = 5;
+    ctx.shadowColor = strokColor || '#f0bd32';
+    ctx.strokeStyle = strokColor || '#f0bd32';
+    ctx.strokeText(username, 5, 10);
+
+    ctx.font = (fontSize - 10) + 'px Forte';
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = color;
+    ctx.fillText(username, 5, 10);
+
+    return canvas;
+}
+
+function createText(sizeInfo) {
+    let {
+        x,
+        h,
+        text
+    } = sizeInfo;
+    let canvas = mainText({
+        text,
+        size: name_size,
+        color: name_color
+    });
+    render.textures['customText'] = canvas;
+    let nameBodies = Bodies.rectangle(x, -210 - (h / 2), canvas.width, canvas.height, {
+        render: {
+            sprite: {
+                texture: 'customText'
+            }
+        }
+    });
+
+    nameBodies = Body.create({
+        parts: [nameBodies],
+        collisionFilter: {
+            category: 0x0001,
+            mask: 0x0002
+        }
+    })
+
+    return nameBodies;
+}
+
+let imageSrc = ["https://forever25.github.io/matter/image/1-rectangle.png", "https://forever25.github.io/matter/image/2-polygon.png", "https://forever25.github.io/matter/image/3-circle.png"];
+let boallColor = ['#7eb1d3', '#d0829a', '#8bb83d', '#8bb83d', '#e7a835']
+
+// var tks_color = <%= tks_color%>;
+// var tks_size = <%= tks_size%>;
+// var tks_word = <%= tks_word%>;
+// var name_color = <%= name_color%>;
+// var name_size = <%= name_size%>;
+// var tks_time = <%= tks_time%>;
+// var border_c = <%= border_c%>;
+// var bg_color = <%= bg_color%>;
+// var price = <%= price%>;
+// var gift_max = <%= gift_max%>;
+// var full_num = <%= full_num%>;
+
+// console.log(tks_color);
+
+
+let price = 5; //价格过滤点
+let gift_max = 20 //礼物一次性最多可以投的量，默认为20，最大为100
+let full_number = 100 //满框礼物数量，最大5000，最小100，默认200
+let name_size = 30 //粉丝名字颜色最小值10，最大值100，默认值25
+let name_color = '#ffffff' //粉丝名字颜色，默认值白色
+let tks_word = 'THANK YOU' //感谢词 最大长度不超过50
+let tks_size = 50 //感谢文字大小 默认30
+let tks_color = '#ffffff'; //感谢文字颜色
+let tks_stroke = '#f0bd32';
+let tf_name = '骨灰拌饭'; //粉丝名字
+let gift_num = 1;
+let moneySum = 0;
+
+// 生成dom结构
+let canvasEl = render.canvas;
+let divWrap = document.createElement('div');
+let thankWrap = document.createElement('canvas');
+let thankCtx = thankWrap.getContext('2d');
+let userWrap = document.createElement('div');
+let userBg = document.createElement('div');
+let divChildbutton1 = document.createElement('button');
+
+divWrap.style.position = 'relative';
+
+divChildbutton1.innerText = '随机生成礼物'
+
+
+$(thankWrap).addClass('roleStyle');
+$(userBg).addClass('userBg');
+$(userWrap).addClass('userWrap');
+
+thankWrap.width = canvasEl.width;
+thankWrap.height = canvasEl.height;
+userWrap.style.width = canvasEl.width + 'px';
+userWrap.style.height = canvasEl.height + 'px';
+
+let thankText = mainText({
+    size: tks_size,
+    text: tks_word,
+    color: tks_color,
+    strokColor: tks_stroke
+});
+thankCtx.drawImage(thankText, thankText.width / 2 - thankWrap.width / 4, (thankWrap.height - thankText.height) / 2);
+
+$(userBg).html(function(){
+    return `<div class="username">${tf_name}</div>`;
+});
+userWrap.appendChild(userBg);
+divWrap.appendChild(thankWrap);
+divWrap.appendChild(canvasEl);
+divWrap.appendChild(userWrap);
+
+document.body.appendChild(divWrap);
+document.body.appendChild(divChildbutton1);
+
+let moneyNum;
+userBg.addEventListener('animationend',function(){
+    sendgift(moneyNum);
+});
+
+// 事件绑定
+divChildbutton1.addEventListener('click', function () {
+    moneyNum = Math.round(Math.random() * 100);
+   if( moneyNum <= price) {
+        return ;
+   }
+
+   $(thankWrap).addClass('fadeInAnimation');
+   $(userBg).addClass('fadeInAnimation');
+   moneySum += moneyNum;
+   console.log(moneySum);
+
+});
+
+function sendgift(number) {
+    $(thankWrap).removeClass('fadeInAnimation');
+    $(userBg).removeClass('fadeInAnimation');
+
+    console.log(gift_num)
+
+    if (number > (price + 40)) {
+        dropgift(imageSrc[Math.round(Math.random() * 2)], Common.choose(boallColor), {
+            w: 70,
+            h: 70,
+            num: 8
+        });
+
+    } else if (number > (price + 20)) {
+        dropgift(imageSrc[Math.round(Math.random() * 2)], Common.choose(boallColor), {
+            w: 50,
+            h: 50,
+            num: 4
+        });
+
+    } else if(number > price) {
+        dropgift(imageSrc[Math.round(Math.random() * 2)], Common.choose(boallColor), {
+            w: 40,
+            h: 40,
+            num: 2
+        });
+
+    }
+    if (gift_num >= 50) {
+        gift_num = 0;
+        World.clear(engine.world);
+    }
+}
+
+Engine.run(engine);
+Render.run(render);
+</script>
 </html>
